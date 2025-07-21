@@ -1,24 +1,3 @@
-# Builder stage
-FROM node:18-alpine AS builder
-
-# Install build dependencies for faster npm operations
-RUN apk add --no-cache python3 make g++
-
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-COPY tsconfig.json ./
-
-# Install all dependencies (including dev dependencies for building)
-RUN npm ci
-
-# Copy source code
-COPY src/ ./src/
-
-# Build the application using direct path to TypeScript binary
-RUN ./node_modules/.bin/tsc
-
 # Production stage
 FROM node:18-alpine AS production
 
@@ -31,8 +10,8 @@ COPY package*.json ./
 # Install only production dependencies
 RUN npm ci --only=production && npm cache clean --force
 
-# Copy built application from builder stage
-COPY --from=builder /app/dist ./dist
+# Copy pre-built application
+COPY dist/ ./dist/
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs
