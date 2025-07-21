@@ -2,9 +2,6 @@
 node_modules
 npm-debug.log*
 
-# Build output (will be built inside container)
-dist
-
 # Environment files
 .env
 .env.local
