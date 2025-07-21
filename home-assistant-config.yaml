@@ -1,0 +1,66 @@
+# Home Assistant Configuration Example
+# Add this to your configuration.yaml
+
+# REST sensor to fetch weather data
+sensor:
+  - platform: rest
+    name: "Luften Weather Data"
+    resource: "http://YOUR_SERVER_IP:2385/api/weather"
+    method: GET
+    scan_interval: 3600 # Update every 60 minutes
+    json_attributes_path: "$.statistics"
+    json_attributes:
+      - temperature
+      - relative_humidity
+      - absolute_humidity
+    value_template: "{{ value_json.metadata.total_points }}"
+    unit_of_measurement: "data points"
+
+# Template sensors for individual metrics
+template:
+  - sensor:
+      - name: "Weather Temperature Latest"
+        unit_of_measurement: "°C"
+        state: >
+          {% set temp_data = state_attr('sensor.luften_weather_data', 'temperature') %}
+          {% if temp_data %}
+            {{ temp_data[-1].value }}
+          {% else %}
+            unavailable
+          {% endif %}
+
+      - name: "Weather Relative Humidity Latest"
+        unit_of_measurement: "%"
+        state: >
+          {% set rh_data = state_attr('sensor.luften_weather_data', 'relative_humidity') %}
+          {% if rh_data %}
+            {{ rh_data[-1].value }}
+          {% else %}
+            unavailable
+          {% endif %}
+
+      - name: "Weather Absolute Humidity Latest"
+        unit_of_measurement: "g/m³"
+        state: >
+          {% set ah_data = state_attr('sensor.luften_weather_data', 'absolute_humidity') %}
+          {% if ah_data %}
+            {{ ah_data[-1].value }}
+          {% else %}
+            unavailable
+          {% endif %}
+
+# Lovelace dashboard card example
+# Add this to your dashboard YAML:
+type: statistics-graph
+entities:
+  - sensor.weather_temperature_latest
+  - sensor.weather_relative_humidity_latest
+  - sensor.weather_absolute_humidity_latest
+title: "Weather Forecast - Hamburg"
+period:
+  hour: 24
+stat_types:
+  - mean
+  - min
+  - max
+chart_type: line
