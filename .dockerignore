@@ -2,7 +2,7 @@
 node_modules
 npm-debug.log*
 
-# Build output (will be copied separately)
+# Build output (will be built inside container)
 dist
 
 # Environment files
@@ -22,14 +22,9 @@ Thumbs.db
 .git
 .gitignore
 
-# Documentation (reduce image size)
+# Documentation
 README.md
 *.md
-
-# Development files
-src
-tsconfig.json
-nodemon.json
 
 # Docker files
 Dockerfile
@@ -38,3 +33,6 @@ docker-compose.yml
 
 # Home Assistant config (not needed in container)
 home-assistant-config.yaml
+
+# Deployment script
+deploy.sh
