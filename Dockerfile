@@ -10,9 +10,6 @@ COPY tsconfig.json ./
 # Install all dependencies (including dev dependencies for building)
 RUN npm ci
 
-# Verify TypeScript is installed
-RUN npx tsc --version
-
 # Copy source code
 COPY src/ ./src/
 
