@@ -10,8 +10,8 @@ COPY package*.json ./
 # Install dependencies
 RUN npm ci --only=production
 
-# Copy source code
-COPY dist/ ./dist/
+# Build the code
+RUN npm run build
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs
