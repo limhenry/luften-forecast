@@ -11,8 +11,7 @@ COPY package*.json ./
 COPY tsconfig.json ./
 
 # Install all dependencies (including dev dependencies for building)
-# Use npm ci with optimization flags for faster installation
-RUN npm ci --prefer-offline --no-audit --no-fund
+RUN npm ci
 
 # Copy source code
 COPY src/ ./src/
@@ -29,8 +28,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install only production dependencies with optimization flags
-RUN npm ci --only=production --prefer-offline --no-audit --no-fund && npm cache clean --force
+# Install only production dependencies
+RUN npm ci --only=production && npm cache clean --force
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
