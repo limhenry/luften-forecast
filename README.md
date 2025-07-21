@@ -99,6 +99,24 @@ npm run docker:down
 npm run docker:restart
 ```
 
+### Troubleshooting Docker Builds
+
+If you encounter build issues, try these steps:
+
+```bash
+# Clean Docker cache and rebuild
+docker compose down
+docker system prune -f
+docker compose build --no-cache
+docker compose up -d
+```
+
+Common issues:
+
+- **"tsc: not found"**: Build cache issue - use `--no-cache` flag
+- **Build hangs**: Network or dependency issue - check internet connection
+- **Permission errors**: Ensure Docker daemon is running
+
 ### Docker Environment
 
 The containerized API server will be available at:

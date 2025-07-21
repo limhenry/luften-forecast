@@ -1,7 +1,6 @@
-# Build stage
+# Builder stage
 FROM node:18-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
 # Copy package files
@@ -11,10 +10,13 @@ COPY tsconfig.json ./
 # Install all dependencies (including dev dependencies for building)
 RUN npm ci
 
+# Verify TypeScript is installed
+RUN npx tsc --version
+
 # Copy source code
 COPY src/ ./src/
 
-# Build the TypeScript code
+# Build the application
 RUN npm run build
 
 # Production stage
