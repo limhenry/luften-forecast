@@ -1,5 +1,5 @@
-# Use Node.js 18 alpine image for smaller size
-FROM node:18-alpine
+# Build stage
+FROM node:18-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -17,8 +17,20 @@ COPY src/ ./src/
 # Build the TypeScript code
 RUN npm run build
 
-# Remove dev dependencies to reduce image size
+# Production stage
+FROM node:18-alpine AS production
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install only production dependencies
 RUN npm ci --only=production && npm cache clean --force
+
+# Copy built application from builder stage
+COPY --from=builder /app/dist ./dist
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs
