@@ -12,6 +12,7 @@ COPY tsconfig.json ./
 COPY src/ ./src/
 
 # Remove dev dependencies to reduce image size
+ENV NODE_OPTIONS="--dns-result-order=ipv4first"
 RUN npm ci --registry=https://registry.npmjs.org/ --loglevel verbose
 
 # Build the TypeScript code
