@@ -15,7 +15,7 @@ RUN npm ci
 COPY src/ ./src/
 
 # Remove dev dependencies to reduce image size
-RUN npm ci --only=production --registry=https://registry.npmjs.org/  
+RUN npm ci --registry=https://registry.npmjs.org/ --loglevel verbose
 
 # Build the TypeScript code
 RUN npm run build
