@@ -14,11 +14,11 @@ RUN npm ci
 # Copy source code
 COPY src/ ./src/
 
-# Build the TypeScript code
-RUN npm run build
-
 # Remove dev dependencies to reduce image size
 RUN npm ci --only=production --registry=https://registry.npmjs.org/  
+
+# Build the TypeScript code
+RUN npm run build
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs
