@@ -33,3 +33,5 @@ home-assistant-config.yaml
 
 # Deployment script
 deploy.sh
+
+dist

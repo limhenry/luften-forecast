@@ -1,2 +1,2 @@
-# dist  # Commented out - we're committing dist for easy deployment
+dist
 node_modules

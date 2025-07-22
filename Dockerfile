@@ -1,25 +1,27 @@
-# Production stage
-FROM node:18-alpine AS production
+ARG NODE_VERSION=18.0.0
 
-# Set working directory
-WORKDIR /app
+FROM node:${NODE_VERSION}-alpine
 
-# Copy package files
-COPY package*.json ./
+# Use production node environment by default.
+ENV NODE_ENV production
 
-# Install only production dependencies
-RUN npm ci --only=production && npm cache clean --force
 
-# Copy pre-built application
-COPY dist/ ./dist/
+WORKDIR /usr/src/app
 
-# Create non-root user for security
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodejs -u 1001
+# Download dependencies as a separate step to take advantage of Docker's caching.
+# Leverage a cache mount to /root/.npm to speed up subsequent builds.
+# Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
+# into this layer.
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm ci --omit=dev
 
-# Change ownership of the app directory
-RUN chown -R nodejs:nodejs /app
-USER nodejs
+# Run the application as a non-root user.
+USER node
+
+# Copy the rest of the source files into the image.
+COPY . .
 
 # Expose port
 EXPOSE 3000
