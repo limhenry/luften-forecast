@@ -8,6 +8,8 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 
+RUN curl google.com
+
 # Install all dependencies (including dev dependencies for building)
 RUN npm ci
 

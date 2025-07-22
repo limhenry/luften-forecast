@@ -22,12 +22,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    networks:
-      - luften-forecast-network
-networks:
-  luften-forecast-network:
-    driver: bridge
-    enable_ipv6: false
 # Optional: Add volume for logs if needed
 # volumes:
 #   luften-logs:
