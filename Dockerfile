@@ -8,6 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 
+RUN apk add --no-cache curl
 RUN curl google.com
 
 # Install all dependencies (including dev dependencies for building)
